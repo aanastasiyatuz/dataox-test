@@ -11,3 +11,4 @@ class News(peewee.Model):
     location = peewee.CharField(max_length=100)
     beds = peewee.IntegerField()
     price = peewee.DecimalField(max_digits=10, decimal_places=2)
+    date = peewee.DateTimeField()
