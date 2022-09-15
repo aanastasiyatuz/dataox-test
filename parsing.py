@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as BS
+from db.models import News
+from config import pg_database
 
 BASE_URL = 'https://www.kijiji.ca'
 
@@ -16,7 +18,6 @@ def get_next_page(url):
 
 def get_news_info(soup:BS):
     news_list = soup.find_all('div', {'class':'search-item'})
-    data = []
     for news in news_list:
         try:
             image = news.find('picture').find('img').get("data-src")
@@ -33,19 +34,18 @@ def get_news_info(soup:BS):
             price = float(news.find('div', {'class':'price'}).text.replace('\n', '').strip().replace(',', '').replace('$', ''))
         except:
             price = 0.0
-        data.append({'image':image, 'title':title, 'location':location, 'desc':desc, 'beds':beds, 'price':price})
-    return data
+        News.create(image=image, title=title, location=location, desc=desc, beds=beds, price=price)
 
 def main():
+    pg_database.create_tables([News])
     url = BASE_URL + '/b-apartments-condos/city-of-toronto/c37l1700273'
     soup = get_soup(url)
-    res = []
     while soup:
         print(url)
-        data = get_news_info(soup)
-        res += data
+        get_news_info(soup)
         url = BASE_URL + get_next_page(url)
         soup = get_soup(url)
+    pg_database.close()
 
 if __name__ == '__main__':
     main()

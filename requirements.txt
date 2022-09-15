@@ -1,3 +1,6 @@
-requests
-beautifulsoup4
-lxml
+requests==2.28.1
+beautifulsoup4==4.11.1
+lxml==4.9.1
+peewee==3.15.2
+python-decouple==3.6
+psycopg2-binary==2.9.3

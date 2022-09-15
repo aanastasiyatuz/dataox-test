@@ -1,0 +1,4 @@
+DB_NAME=dataox_test_db
+DB_USER=user
+DB_PASSWORD=password
+DB_HOST=127.0.0.1
